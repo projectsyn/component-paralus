@@ -21,5 +21,5 @@ local namespace = kube.Namespace(params.namespace) {
 };
 
 {
-    '10_namespoace': namespace,
+  '10_namespace': namespace,
 }

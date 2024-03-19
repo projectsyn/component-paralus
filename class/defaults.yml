@@ -4,19 +4,31 @@ parameters:
     namespace: syn-paralus
 
     charts:
-      paralus:
+      ztka:
         source: https://paralus.github.io/helm-charts
         version: 0.2.8
+
+    dashboard_container_port: 8000
 
     helm_values: # Refer to docs: https://github.com/paralus/helm-charts/blob/main/charts/ztka/values.yaml
       replicaCount: 2
 
-      postgresql:
+      analytics:
         enable: false
-        address: "foo"
-        username: "foo"
-        password: "foo"
-        database: "foo"
+
+      services:
+        dashboard:
+          ports:
+            - name: nginx
+              containerPort: ${paralus:dashboard_container_port}
+
+      deploy:
+        postgresql:
+          enable: false
+          address: "foo"
+          username: "foo"
+          password: "foo"
+          database: "foo"
 
       autoscaling:
         enabled: false
