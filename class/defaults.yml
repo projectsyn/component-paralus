@@ -1,0 +1,25 @@
+parameters:
+  paralus:
+    =_metadata: {}
+    namespace: syn-paralus
+
+    charts:
+      paralus:
+        source: https://paralus.github.io/helm-charts
+        version: 0.2.8
+
+    helm_values: # Refer to docs: https://github.com/paralus/helm-charts/blob/main/charts/ztka/values.yaml
+      replicaCount: 2
+
+      postgresql:
+        enable: false
+        address: "foo"
+        username: "foo"
+        password: "foo"
+        database: "foo"
+
+      autoscaling:
+        enabled: false
+        minReplicas: 1
+        maxReplicas: 10
+        targetCPUUtilizationPercentage: 80
