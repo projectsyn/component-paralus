@@ -1,0 +1,4 @@
+parameters:
+  paralus:
+    =_metadata: {}
+    namespace: syn-paralus
