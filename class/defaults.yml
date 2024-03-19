@@ -4,7 +4,7 @@ parameters:
     namespace: syn-paralus
 
     charts:
-      paralus:
+      ztka:
         source: https://paralus.github.io/helm-charts
         version: 0.2.8
 
