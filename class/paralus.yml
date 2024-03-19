@@ -1,0 +1,36 @@
+parameters:
+  kapitan:
+    dependencies:
+      - type: helm
+        source: ${paralus:charts:paralus:source}
+        chart_name: paralus
+        version: ${paralus:charts:paralus:version}
+        output_path: ${_base_directory}/helmcharts/paralus/${paralus:charts:paralus:version}/
+    compile:
+      - input_paths:
+          - ${_base_directory}/component/app.jsonnet
+        input_type: jsonnet
+        output_path: apps/
+      - input_paths:
+          - ${_base_directory}/component/main.jsonnet
+        input_type: jsonnet
+        output_path: paralus/
+        # Helmchart
+      - input_paths:
+          - ${_base_directory}/helmcharts/paralus/${paralus:charts:paralus:version}
+        input_type: helm
+        output_path: paralus/10_helmchart
+        helm_values: ${paralus:helm_values}
+        helm_params:
+          name: paralus
+          namespace: ${paralus:namespace}
+          dependency_update: true
+  commodore:
+    postprocess:
+      filters:
+        - type: jsonnet
+          path: paralus/10_helmchart/paralus/templates/certificates
+          filter: postprocess/patch_certificates.jsonnet
+        - type: jsonnet
+          path: paralus/10_helmchart/paralus/templates
+          filter: postprocess/patch_argocd_wave.jsonnet
