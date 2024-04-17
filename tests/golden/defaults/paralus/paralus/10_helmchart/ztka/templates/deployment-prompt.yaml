@@ -25,7 +25,7 @@ spec:
             - sh
             - -c
             - tail -F /audit-logs/audit.log 2>/tmp/tail-err
-          image: busybox:latest
+          image: docker.io/library/busybox:latest
           imagePullPolicy: IfNotPresent
           name: prompt-tail
           securityContext: {}
@@ -57,7 +57,7 @@ spec:
             - -c
             - wget -q "https://dl.k8s.io/release/$(wget -qO- https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
               -O /data/kubectl && chmod +x /data/kubectl
-          image: busybox:latest
+          image: docker.io/library/busybox:latest
           name: install-kubectl
           volumeMounts:
             - mountPath: /data

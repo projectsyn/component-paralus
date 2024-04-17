@@ -28,14 +28,8 @@ parameters:
     postprocess:
       filters:
         - type: jsonnet
-          path: paralus/10_helmchart/ztka/templates/certificates
-          filter: postprocess/patch_certificates.jsonnet
-        - type: jsonnet
           path: paralus/10_helmchart/ztka/templates
-          filter: postprocess/patch_argocd_wave.jsonnet
-        - type: jsonnet
-          path: paralus/10_helmchart/ztka/templates
-          filter: postprocess/patch_dashboard.jsonnet
+          filter: postprocess/patch_paralus_deployments.jsonnet
         - type: jsonnet
           path: paralus/10_helmchart/ztka/charts/kratos/templates
-          filter: postprocess/patch_kratos_runasuser.jsonnet
+          filter: postprocess/patch_kratos.jsonnet
