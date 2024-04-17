@@ -112,7 +112,6 @@ spec:
             privileged: false
             readOnlyRootFilesystem: true
             runAsNonRoot: true
-            runAsUser: 100
           volumeMounts:
             - mountPath: /etc/config
               name: ztka-kratos-config-volume

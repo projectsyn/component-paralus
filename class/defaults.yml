@@ -16,12 +16,6 @@ parameters:
       analytics:
         enable: false
 
-      services:
-        dashboard:
-          ports:
-            - name: nginx
-              containerPort: ${paralus:dashboard_container_port}
-
       deploy:
         postgresql:
           enable: false
