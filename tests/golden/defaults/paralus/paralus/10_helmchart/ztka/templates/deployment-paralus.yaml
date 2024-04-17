@@ -27,7 +27,7 @@ spec:
             - sh
             - -c
             - tail -F /audit-logs/audit.log 2>/tmp/tail-err
-          image: busybox:latest
+          image: docker.io/library/busybox:latest
           imagePullPolicy: IfNotPresent
           name: paralus-tail
           securityContext: {}

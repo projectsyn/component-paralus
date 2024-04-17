@@ -81,12 +81,43 @@ local fixupDashboardDeploy(obj) =
     },
   };
 
-local fixupDashboard(obj) =
+local fixupBusyboxImage(obj) =
+  local fixupContainer(c) =
+    if c.image == 'busybox:latest' then
+      c {
+        image: '%(registry)s/%(repository)s:%(tag)s' % params.images.busybox,
+      }
+    else
+      c;
+
+  obj {
+    spec+: {
+      template+: {
+        spec+: {
+          containers: [
+            fixupContainer(c)
+            for c in super.containers
+          ],
+          initContainers: [
+            fixupContainer(c)
+            for c in super.initContainers
+          ],
+        },
+      },
+    },
+  };
+
+local fixupManifests(obj) =
   if obj.kind == 'Deployment' && obj.metadata.name == 'dashboard' then
     fixupDashboardDeploy(obj)
+  else if
+    obj.kind == 'Deployment' &&
+    std.member([ 'paralus', 'prompt' ], obj.metadata.name)
+  then
+    fixupBusyboxImage(obj)
   else
     obj;
 
-com.fixupDir(manifests_dir, fixupDashboard) + {
+com.fixupDir(manifests_dir, fixupManifests) + {
   'dashboard-nginx-configmap': dashboard_nginx_configmap,
 }
