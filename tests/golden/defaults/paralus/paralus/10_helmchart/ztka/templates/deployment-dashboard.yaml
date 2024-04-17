@@ -29,5 +29,21 @@ spec:
               name: nginx
           resources: {}
           securityContext: {}
+          volumeMounts:
+            - mountPath: /var/cache/nginx
+              name: cache
+            - mountPath: /var/run
+              name: varrun
+            - mountPath: /etc/nginx/conf.d/default.conf
+              name: nginx-config
+              subPath: nginx.conf
       securityContext: {}
       serviceAccountName: ztka-ztka
+      volumes:
+        - emptyDir: {}
+          name: cache
+        - emptyDir: {}
+          name: varrun
+        - configMap:
+            name: dashboard-nginx-config
+          name: nginx-config
