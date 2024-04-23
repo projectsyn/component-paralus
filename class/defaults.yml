@@ -23,3 +23,11 @@ parameters:
         minReplicas: 1
         maxReplicas: 10
         targetCPUUtilizationPercentage: 80
+
+      ingress:
+        annotations:
+          cert-manager.io/cluster-issuer: "letsencrypt-production"
+        tls:
+          - hosts:
+              - console.paralus.vshn.ch
+            secretName: console-paralus-cert
