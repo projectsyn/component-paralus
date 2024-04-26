@@ -107,6 +107,27 @@ local fixupBusyboxImage(obj) =
     },
   };
 
+local fixupRunAsUser(obj) =
+  obj {
+    spec+: {
+      template+: {
+        spec+: {
+          containers: [
+            if c.name == 'relay-server' then
+              c {
+                securityContext: {
+                  runAsUser: 0,
+                },
+              }
+            else
+              c
+            for c in super.containers
+          ],
+        },
+      },
+    },
+  };
+
 local fixupManifests(obj) =
   if obj.kind == 'Deployment' && obj.metadata.name == 'dashboard' then
     fixupDashboardDeploy(obj)
@@ -115,6 +136,11 @@ local fixupManifests(obj) =
     std.member([ 'paralus', 'prompt' ], obj.metadata.name)
   then
     fixupBusyboxImage(obj)
+  else if
+    obj.kind == 'Deployment' &&
+    obj.metadata.name == 'relay-server'
+  then
+    fixupRunAsUser(obj)
   else
     obj;
 
