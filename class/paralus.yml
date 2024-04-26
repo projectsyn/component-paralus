@@ -31,5 +31,8 @@ parameters:
           path: paralus/10_helmchart/ztka/templates
           filter: postprocess/patch_paralus_deployments.jsonnet
         - type: jsonnet
+          path: paralus/10_helmchart/ztka/templates
+          filter: postprocess/patch_ingress.jsonnet
+        - type: jsonnet
           path: paralus/10_helmchart/ztka/charts/kratos/templates
           filter: postprocess/patch_kratos.jsonnet
