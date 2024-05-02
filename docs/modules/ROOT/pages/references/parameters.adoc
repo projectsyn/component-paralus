@@ -50,6 +50,18 @@ The dashboard deployment currently isn't configurable in the Helm chart.
 If the Helm chart ever gains support for customizing the dashboard deployment, the implementation for this parameter should be reevaluated.
 ====
 
+== `openshift_compatibility`
+
+[horizontal]
+type:: boolean
+default:: `false`
+
+Whether to apply customizations that are only required on OpenShift.
+
+If this parameter is set to true and the Helm chart is configured to generate `Ingress` resources, the wildcard ingress will be adjusted to work with the OpenShift ingress router.
+
+NOTE: OpenShift's ingress router must be configured to allow wildcard routes for the component to work on OpenShift.
+
 == `helm_values`
 
 [horizontal]

@@ -7,7 +7,7 @@ local params = inv.parameters.paralus;
 local manifests_dir = std.extVar('output_path');
 
 local fixupZtkaIngress(obj) =
-  obj {
+  std.prune(obj) {
     metadata+: {
       annotations+: {
         'route.openshift.io/termination': 'passthrough',
@@ -36,4 +36,7 @@ local fixupManifests(obj) =
   else
     obj;
 
-com.fixupDir(manifests_dir, fixupManifests)
+if params.openshift_compatibility then
+  com.fixupDir(manifests_dir, fixupManifests)
+else
+  {}
