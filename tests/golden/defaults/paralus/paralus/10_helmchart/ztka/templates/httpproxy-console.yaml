@@ -1,0 +1,44 @@
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: console
+spec:
+  routes:
+    - conditions:
+        - prefix: /auth
+      services:
+        - name: paralus
+          port: 11000
+    - conditions:
+        - prefix: /event
+      services:
+        - name: paralus
+          port: 11000
+    - conditions:
+        - prefix: /infra
+      services:
+        - name: paralus
+          port: 11000
+    - conditions:
+        - prefix: /v2/sentry
+      services:
+        - name: paralus
+          port: 11000
+    - conditions:
+        - prefix: /v2/debug/prompt
+      enableWebsockets: true
+      services:
+        - name: prompt
+          port: 7009
+    - conditions:
+        - prefix: /
+      services:
+        - name: dashboard
+          port: 80
+    - conditions:
+        - prefix: /self-service
+      services:
+        - name: ztka-kratos-public
+          port: 80
+  virtualhost:
+    fqdn: console.paralus.local

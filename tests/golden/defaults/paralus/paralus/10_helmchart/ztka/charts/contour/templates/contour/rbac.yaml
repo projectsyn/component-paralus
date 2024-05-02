@@ -1,0 +1,215 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/instance: ztka
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: contour
+    helm.sh/chart: contour-7.8.0
+  name: ztka-contour-contour
+rules:
+  - apiGroups:
+      - ''
+    resources:
+      - configmaps
+    verbs:
+      - create
+      - get
+      - update
+  - apiGroups:
+      - ''
+    resources:
+      - endpoints
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - ''
+    resources:
+      - namespaces
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - ''
+    resources:
+      - secrets
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - ''
+    resources:
+      - services
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - networking.k8s.io
+    resources:
+      - ingressclasses
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - networking.k8s.io
+    resources:
+      - ingresses
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - networking.k8s.io
+    resources:
+      - ingresses/status
+    verbs:
+      - create
+      - get
+      - update
+  - apiGroups:
+      - networking.x-k8s.io
+      - gateway.networking.k8s.io
+    resources:
+      - gatewayclasses
+      - gateways
+      - httproutes
+      - tcproutes
+      - tlsroutes
+      - udproutes
+      - referencepolicies
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - networking.x-k8s.io
+      - gateway.networking.k8s.io
+    resources:
+      - gatewayclasses/status
+      - gateways/status
+      - httproutes/status
+      - tcproutes/status
+      - tlsroutes/status
+      - udproutes/status
+    verbs:
+      - update
+  - apiGroups:
+      - projectcontour.io
+    resources:
+      - contourconfigurations
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - projectcontour.io
+    resources:
+      - contourconfigurations/status
+    verbs:
+      - create
+      - get
+      - update
+  - apiGroups:
+      - projectcontour.io
+    resources:
+      - extensionservices
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - projectcontour.io
+    resources:
+      - extensionservices/status
+    verbs:
+      - create
+      - get
+      - update
+  - apiGroups:
+      - projectcontour.io
+    resources:
+      - httpproxies
+      - tlscertificatedelegations
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - projectcontour.io
+    resources:
+      - httpproxies/status
+    verbs:
+      - create
+      - get
+      - update
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  labels:
+    app.kubernetes.io/instance: ztka
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: contour
+    helm.sh/chart: contour-7.8.0
+  name: ztka-contour-contour
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: ztka-contour-contour
+subjects:
+  - kind: ServiceAccount
+    name: ztka-contour-contour
+    namespace: syn-paralus
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  labels:
+    app.kubernetes.io/instance: ztka
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: contour
+    helm.sh/chart: contour-7.8.0
+  name: ztka-contour-contour
+  namespace: syn-paralus
+rules:
+  - apiGroups:
+      - ''
+    resources:
+      - events
+    verbs:
+      - create
+      - get
+      - update
+  - apiGroups:
+      - coordination.k8s.io
+    resources:
+      - leases
+    verbs:
+      - create
+      - get
+      - update
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  labels:
+    app.kubernetes.io/instance: ztka
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: contour
+    helm.sh/chart: contour-7.8.0
+  name: ztka-contour-contour-role
+  namespace: syn-paralus
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: ztka-contour-contour
+subjects:
+  - kind: ServiceAccount
+    name: ztka-contour-contour
+    namespace: syn-paralus
