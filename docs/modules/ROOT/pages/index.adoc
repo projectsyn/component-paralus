@@ -1,5 +1,7 @@
 = paralus
 
-paralus is a Commodore component to manage paralus.
+paralus is a Commodore component to manage https://www.paralus.io/[Paralus].
+
+The component is based on the Paralus ztka Helm chart.
 
 See the xref:references/parameters.adoc[parameters] reference for further details.
