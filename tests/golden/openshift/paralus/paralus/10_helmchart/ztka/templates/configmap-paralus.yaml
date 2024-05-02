@@ -1,0 +1,26 @@
+apiVersion: v1
+data:
+  AUDIT_LOG_FILE: /audit-logs/audit.log
+  AUDIT_LOG_STORAGE: database
+  CORE_RELAY_CONNECTOR_HOST: '*.core-connector.paralus.example.com:443'
+  CORE_RELAY_USER_HOST: '*.user.paralus.example.com:443'
+  DEV: 'false'
+  ES_END_POINT: ''
+  ES_INDEX_PREFIX: ralog-system
+  KRATOS_ADDR: http://ztka-kratos-admin
+  KRATOS_PUB_ADDR: http://ztka-kratos-public
+  RELAY_AUDITS_ES_INDEX_PREFIX: ralog-relay
+  RELAY_COMMANDS_ES_INDEX_PREFIX: ralog-prompt
+  RELAY_IMAGE: paralusio/relay:v0.1.7
+  SCHEDULER_NAMESPACE: syn-paralus
+  SENTRY_BOOTSTRAP_ADDR: console.paralus.example.com:80
+  SENTRY_PEERING_HOST: paralus:10001
+kind: ConfigMap
+metadata:
+  labels:
+    app.kubernetes.io/instance: ztka
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: paralus
+    app.kubernetes.io/version: v0.2.7
+    helm.sh/chart: ztka-0.2.8
+  name: paralus-config

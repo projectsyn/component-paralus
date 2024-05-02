@@ -1,0 +1,15 @@
+apiVersion: v1
+data:
+  default_browser_return_url: http://console.paralus.example.com
+  selfservice_flows_error_ui_url: http://console.paralus.example.com/error-page
+  selfservice_flows_recovery_ui_url: http://console.paralus.example.com/ksettings
+  selfservice_flows_registration_ui_url: http://console.paralus.example.com/registeroidc
+  selfservice_flows_settings_ui_url: http://console.paralus.example.com/ksettings
+  serve_public_base_url: http://console.paralus.example.com
+kind: ConfigMap
+metadata:
+  labels:
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/version: v0.2.7
+    helm.sh/chart: ztka-0.2.8
+  name: kratos-config

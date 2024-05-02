@@ -1,13 +1,13 @@
 {
   "template": "https://github.com/projectsyn/commodore-component-template.git",
-  "commit": "705f9d2badd556f687965b8118820531b267e45c",
+  "commit": "4291cc289dc10c009574c21ceba8eac0b68b0e23",
   "checkout": "main",
   "context": {
     "cookiecutter": {
       "name": "paralus",
       "slug": "paralus",
       "parameter_key": "paralus",
-      "test_cases": "defaults",
+      "test_cases": "defaults openshift",
       "add_lib": "n",
       "add_pp": "n",
       "add_golden": "y",
