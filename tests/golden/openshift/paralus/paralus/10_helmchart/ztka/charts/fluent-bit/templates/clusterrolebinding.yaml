@@ -1,0 +1,18 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  labels:
+    app.kubernetes.io/instance: ztka
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: fluent-bit
+    app.kubernetes.io/version: 1.9.8
+    helm.sh/chart: fluent-bit-0.20.8
+  name: ztka-fluent-bit
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: ztka-fluent-bit
+subjects:
+  - kind: ServiceAccount
+    name: ztka-fluent-bit
+    namespace: syn-paralus

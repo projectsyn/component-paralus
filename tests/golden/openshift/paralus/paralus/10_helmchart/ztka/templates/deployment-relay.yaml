@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/instance: ztka
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: relay
+    app.kubernetes.io/version: v0.2.7
+    helm.sh/chart: ztka-0.2.8
+  name: relay-server
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: ztka
+      app.kubernetes.io/name: relay
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/instance: ztka
+        app.kubernetes.io/name: relay
+    spec:
+      containers:
+        - args:
+            - --mode
+            - tail
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          envFrom:
+            - configMapRef:
+                name: relay-server-config
+          image: paralusio/relay:v0.1.7
+          imagePullPolicy: IfNotPresent
+          name: relay-tail
+          securityContext: {}
+          volumeMounts:
+            - mountPath: /audit-logs
+              name: relay-audit-logs
+        - args:
+            - --mode
+            - server
+            - --log-level
+            - '3'
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          envFrom:
+            - configMapRef:
+                name: relay-server-config
+          image: paralusio/relay:v0.1.7
+          imagePullPolicy: IfNotPresent
+          name: relay-server
+          ports:
+            - containerPort: 443
+              name: https
+          resources: {}
+          securityContext:
+            runAsUser: 0
+          volumeMounts:
+            - mountPath: /audit-logs
+              name: relay-audit-logs
+      securityContext: {}
+      serviceAccountName: ztka-ztka
+      volumes:
+        - emptyDir: {}
+          name: relay-audit-logs

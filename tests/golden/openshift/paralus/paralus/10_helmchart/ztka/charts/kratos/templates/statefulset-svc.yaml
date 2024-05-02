@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations: null
+  labels:
+    app.kubernetes.io/component: courier
+    app.kubernetes.io/instance: ztka
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: kratos
+    app.kubernetes.io/version: v0.11.1
+    helm.sh/chart: kratos-0.29.0
+  name: ztka-kratos-courier
+  namespace: syn-paralus
+spec:
+  clusterIP: None
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: http-public
+  selector:
+    app.kubernetes.io/instance: ztka
+    app.kubernetes.io/name: ztka-kratos-courier

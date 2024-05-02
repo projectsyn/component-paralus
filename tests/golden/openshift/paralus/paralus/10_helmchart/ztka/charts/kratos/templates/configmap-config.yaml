@@ -1,0 +1,111 @@
+apiVersion: v1
+data:
+  identity.schema.v1.json: |
+    {
+      "$id": "https://schemas.paralus.io/email-password/identity.schema.v1.json",
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Person",
+      "type": "object",
+      "properties": {
+        "traits": {
+          "type": "object",
+          "properties": {
+            "first_name": {
+              "title": "First name",
+              "type": "string",
+              "pattern": "^.*$"
+            },
+            "last_name": {
+              "title": "Last name",
+              "type": "string",
+              "pattern": "^.*$"
+            },
+            "email": {
+              "type": "string",
+              "format": "email",
+              "title": "E-Mail",
+              "minLength": 3,
+              "ory.sh/kratos": {
+                "credentials": {
+                  "password": {
+                    "identifier": true
+                  }
+                },
+                "verification": {
+                  "via": "email"
+                },
+                "recovery": {
+                  "via": "email"
+                }
+              }
+            },
+            "idp_groups": {
+              "type": "array",
+              "title": "IDP groups",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "email"
+          ],
+          "additionalProperties": false
+        }
+      }
+    }
+  kratos.yaml: |
+    courier:
+      smtp: {}
+    identity:
+      default_schema_id: default
+      schemas:
+      - id: default
+        url: file:///etc/config/identity.schema.v1.json
+    selfservice:
+      flows:
+        recovery:
+          enabled: true
+        registration:
+          after:
+            oidc:
+              hooks:
+              - hook: session
+            password:
+              hooks:
+              - hook: session
+          lifespan: 10m
+        settings:
+          privileged_session_max_age: 15m
+      methods:
+        oidc:
+          enabled: true
+        password:
+          enabled: true
+    serve:
+      admin:
+        port: 4434
+      public:
+        cors:
+          allowed_headers:
+          - Authorization
+          - Cookie
+          - Content-Type
+          - X-Session-Token
+          enabled: true
+          exposed_headers:
+          - Content-Type
+          - Set-Cookie
+        port: 4433
+    version: v0.11.0
+kind: ConfigMap
+metadata:
+  annotations: null
+  labels:
+    app.kubernetes.io/instance: ztka
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: kratos
+    app.kubernetes.io/version: v0.11.1
+    helm.sh/chart: kratos-0.29.0
+  name: ztka-kratos-config
+  namespace: syn-paralus
