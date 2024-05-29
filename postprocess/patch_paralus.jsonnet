@@ -128,6 +128,29 @@ local fixupRunAsUser(obj) =
     },
   };
 
+local fixupFluentbitConfig(obj) =
+  local dbAddr = params.helm_values.deploy.postgresql.address;
+  local dbConn =
+    local addrParts = std.split(dbAddr, ':');
+    if std.length(addrParts) > 1 then
+      { addr: addrParts[0], port: addrParts[1] }
+    else
+      { addr: addrParts[0], port: '5432' };
+
+  obj {
+    data+: {
+      'fluent-bit.conf': std.strReplace(
+        std.strReplace(
+          obj.data['fluent-bit.conf'],
+          'Port 5432',
+          'Port %s' % dbConn.port,
+        ),
+        'Host %s' % dbAddr,
+        'Host %s' % dbConn.addr,
+      ),
+    },
+  };
+
 local fixupManifests(obj) =
   if obj.kind == 'Deployment' && obj.metadata.name == 'dashboard' then
     fixupDashboardDeploy(obj)
@@ -141,6 +164,11 @@ local fixupManifests(obj) =
     obj.metadata.name == 'relay-server'
   then
     fixupRunAsUser(obj)
+  else if
+    obj.kind == 'ConfigMap' &&
+    obj.metadata.name == 'fluentbit-config'
+  then
+    fixupFluentbitConfig(obj)
   else
     obj;
 

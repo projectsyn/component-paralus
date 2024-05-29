@@ -29,7 +29,7 @@ parameters:
       filters:
         - type: jsonnet
           path: paralus/10_helmchart/ztka/templates
-          filter: postprocess/patch_paralus_deployments.jsonnet
+          filter: postprocess/patch_paralus.jsonnet
         - type: jsonnet
           path: paralus/10_helmchart/ztka/templates
           filter: postprocess/patch_ingress.jsonnet
