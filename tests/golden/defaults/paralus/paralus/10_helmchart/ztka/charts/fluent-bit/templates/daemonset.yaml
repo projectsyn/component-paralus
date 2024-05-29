@@ -23,7 +23,10 @@ spec:
         app.kubernetes.io/name: fluent-bit
     spec:
       containers:
-        - image: cr.fluentbit.io/fluent/fluent-bit:1.9.8
+        - env:
+            - name: PGSSLMODE
+              value: disable
+          image: cr.fluentbit.io/fluent/fluent-bit:1.9.8
           imagePullPolicy: Always
           livenessProbe:
             httpGet:

@@ -41,3 +41,13 @@ parameters:
         minReplicas: 1
         maxReplicas: 10
         targetCPUUtilizationPercentage: 80
+
+      fluent-bit:
+        # Configure PG sslmode via env var for fluent bit. This should work as
+        # expected, cf.
+        # https://docs.fluentbit.io/manual/pipeline/outputs/postgresql#libpq
+        # The libpq env var for the sslmode connection argument is PGSSLMODE,
+        # cf. https://www.postgresql.org/docs/current/libpq-envars.html
+        env:
+          - name: PGSSLMODE
+            value: ${paralus:db_args:sslmode}
