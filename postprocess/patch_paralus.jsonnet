@@ -151,6 +151,31 @@ local fixupFluentbitConfig(obj) =
     },
   };
 
+local fixedDsn =
+  if std.objectHas(params.helm_values.deploy.postgresql, 'dsn') then
+    std.base64(params.helm_values.deploy.postgresql.dsn)
+  else
+    local args = std.join(
+      '&',
+      std.objectValues(std.mapWithKey(
+        function(k, v) '%s=%s' % [ k, v ],
+        params.db_args
+      ))
+    );
+    local argStr = if std.length(args) > 0 then '?%s' % args else '';
+    local dsn =
+      'postgres://%(username)s:%(password)s@%(address)s/%(database)s%(args)s' %
+      params.helm_values.deploy.postgresql {
+        address:
+          if std.length(std.findSubstr(':', super.address)) > 0 then
+            super.address
+          else
+            '%s:5432' % super.address,
+        args: argStr,
+      };
+
+    std.base64(dsn);
+
 local fixupManifests(obj) =
   if obj.kind == 'Deployment' && obj.metadata.name == 'dashboard' then
     fixupDashboardDeploy(obj)
@@ -169,6 +194,24 @@ local fixupManifests(obj) =
     obj.metadata.name == 'fluentbit-config'
   then
     fixupFluentbitConfig(obj)
+  else if
+    obj.kind == 'Secret' &&
+    obj.metadata.name == 'paralus-db'
+  then
+    obj {
+      data+: {
+        DSN: fixedDsn,
+      },
+    }
+  else if
+    obj.kind == 'Secret' &&
+    obj.metadata.name == 'kratos'
+  then
+    obj {
+      data+: {
+        dsn: fixedDsn,
+      },
+    }
   else
     obj;
 

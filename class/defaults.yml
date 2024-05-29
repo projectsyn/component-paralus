@@ -18,6 +18,10 @@ parameters:
 
     openshift_compatibility: false
 
+    db_args:
+      # Default setting in Helm chart
+      sslmode: disable
+
     helm_values: # Refer to docs: https://github.com/paralus/helm-charts/blob/main/charts/ztka/values.yaml
       replicaCount: 2
 
