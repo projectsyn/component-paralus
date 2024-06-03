@@ -6,19 +6,23 @@ local params = inv.parameters.paralus;
 
 local manifests_dir = std.extVar('output_path');
 
-local fixupKratosRunAsUser = {
-  containers: [
-    if std.get(std.get(c, 'securityContext', {}), 'runAsUser', null) != null then
-      c {
-        securityContext+: {
-          runAsUser:: super.runAsUser,
-        },
-      }
-    else
-      c
-    for c in super.containers
-  ],
-};
+// Only patch Kratos securityContext on OpenShift
+local fixupKratosRunAsUser =
+  if params.openshift_compatibility then {
+    containers: [
+      if std.get(std.get(c, 'securityContext', {}), 'runAsUser', null) != null then
+        c {
+          securityContext+: {
+            runAsUser:: super.runAsUser,
+          },
+        }
+      else
+        c
+      for c in super.containers
+    ],
+  }
+  else
+    {};
 
 local fixupBusyboxImage = {
   initContainers: [
