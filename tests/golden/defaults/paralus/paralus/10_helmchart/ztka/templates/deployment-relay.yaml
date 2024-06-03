@@ -67,8 +67,7 @@ spec:
             - containerPort: 443
               name: https
           resources: {}
-          securityContext:
-            runAsUser: 0
+          securityContext: {}
           volumeMounts:
             - mountPath: /audit-logs
               name: relay-audit-logs

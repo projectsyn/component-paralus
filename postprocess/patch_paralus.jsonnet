@@ -108,25 +108,28 @@ local fixupBusyboxImage(obj) =
   };
 
 local fixupRunAsUser(obj) =
-  obj {
-    spec+: {
-      template+: {
-        spec+: {
-          containers: [
-            if c.name == 'relay-server' then
-              c {
-                securityContext: {
-                  runAsUser: 0,
-                },
-              }
-            else
-              c
-            for c in super.containers
-          ],
+  if params.openshift_compatibility then
+    obj {
+      spec+: {
+        template+: {
+          spec+: {
+            containers: [
+              if c.name == 'relay-server' then
+                c {
+                  securityContext: {
+                    runAsUser: 0,
+                  },
+                }
+              else
+                c
+              for c in super.containers
+            ],
+          },
         },
       },
-    },
-  };
+    }
+  else
+    obj;
 
 local fixupFluentbitConfig(obj) =
   local dbAddr = params.helm_values.deploy.postgresql.address;
