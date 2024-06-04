@@ -1,0 +1,11 @@
+parameters:
+  paralus:
+    openshift_compatibility: true
+    helm_values:
+      deploy:
+        contour:
+          enable: false
+      ingress:
+        enabled: true
+      fqdn:
+        domain: paralus.example.com

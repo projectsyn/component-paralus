@@ -1,0 +1,27 @@
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: ztka-core-connector
+spec:
+  tcpproxy:
+    services:
+      - name: relay-server
+        port: 443
+  virtualhost:
+    fqdn: '*.core-connector.paralus.local'
+    tls:
+      passthrough: true
+---
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: ztka-user
+spec:
+  tcpproxy:
+    services:
+      - name: relay-server
+        port: 443
+  virtualhost:
+    fqdn: '*.user.paralus.local'
+    tls:
+      passthrough: true

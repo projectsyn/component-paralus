@@ -1,0 +1,167 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  annotations: null
+  labels:
+    app.kubernetes.io/instance: ztka
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: kratos
+    app.kubernetes.io/version: v0.11.1
+    helm.sh/chart: kratos-0.29.0
+  name: ztka-kratos-courier
+  namespace: syn-paralus
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: ztka
+      app.kubernetes.io/name: ztka-kratos-courier
+  serviceName: ztka-kratos-courier
+  template:
+    metadata:
+      annotations:
+        checksum/kratos-config: 455090954760645a588506b1e1cea0000e61d3afafb1204b5548d9082caf5872
+        checksum/kratos-templates: 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b
+      labels:
+        app.kubernetes.io/instance: ztka
+        app.kubernetes.io/name: ztka-kratos-courier
+    spec:
+      containers:
+        - args:
+            - courier
+            - watch
+            - --config
+            - /etc/config/kratos.yaml
+          env:
+            - name: LOG_FORMAT
+              value: json
+            - name: LOG_LEVEL
+              value: trace
+            - name: DSN
+              valueFrom:
+                secretKeyRef:
+                  key: dsn
+                  name: kratos
+            - name: SECRETS_DEFAULT
+              valueFrom:
+                secretKeyRef:
+                  key: secretsDefault
+                  name: kratos
+                  optional: true
+            - name: SECRETS_COOKIE
+              valueFrom:
+                secretKeyRef:
+                  key: secretsCookie
+                  name: kratos
+                  optional: true
+            - name: SECRETS_CIPHER
+              valueFrom:
+                secretKeyRef:
+                  key: secretsCipher
+                  name: kratos
+                  optional: true
+            - name: COURIER_SMTP_CONNECTION_URI
+              valueFrom:
+                secretKeyRef:
+                  key: smtpConnectionURI
+                  name: kratos
+            - name: SERVE_PUBLIC_BASE_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: serve_public_base_url
+                  name: kratos-config
+            - name: SELFSERVICE_DEFAULT_BROWSER_RETURN_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: default_browser_return_url
+                  name: kratos-config
+            - name: SELFSERVICE_ALLOWED_RETURN_URLS
+              valueFrom:
+                configMapKeyRef:
+                  key: default_browser_return_url
+                  name: kratos-config
+            - name: SELFSERVICE_FLOWS_SETTINGS_UI_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: selfservice_flows_settings_ui_url
+                  name: kratos-config
+            - name: SELFSERVICE_FLOWS_RECOVERY_UI_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: selfservice_flows_recovery_ui_url
+                  name: kratos-config
+            - name: SELFSERVICE_FLOWS_REGISTRATION_UI_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: selfservice_flows_registration_ui_url
+                  name: kratos-config
+            - name: SELFSERVICE_FLOWS_ERROR_UI_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: selfservice_flows_error_ui_url
+                  name: kratos-config
+          image: oryd/kratos:v0.11.1
+          imagePullPolicy: IfNotPresent
+          name: ztka-kratos-courier
+          resources: null
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 100
+          volumeMounts:
+            - mountPath: /etc/config
+              name: ztka-kratos-config-volume
+              readOnly: true
+            - mountPath: /etc/kratos
+              name: other-configs
+            - mountPath: /etc/kratos/hooks/kratos-config-hooks.yaml
+              name: kratos-config-hooks
+              subPath: kratos-config-hooks.yaml
+        - env:
+            - name: DSN
+              valueFrom:
+                secretKeyRef:
+                  key: DSN
+                  name: paralus-db
+            - name: KRATOS_PROVIDER_CFG
+              value: /etc/kratos/providers.yaml
+          image: paralusio/kratos-synchronizer:v0.2.7
+          name: synchronizer
+          volumeMounts:
+            - mountPath: /etc/kratos
+              name: other-configs
+      initContainers:
+        - command:
+            - sh
+            - -c
+            - touch /etc/kratos/providers.yaml
+          image: docker.io/library/busybox:latest
+          name: create-file
+          volumeMounts:
+            - mountPath: /etc/kratos
+              name: other-configs
+        - command:
+            - sh
+            - -c
+            - 'echo "function(ctx) { user_id: ctx.identity.id }" > /etc/kratos/body.jsonnet'
+          image: docker.io/library/busybox:latest
+          name: create-login-hook-jsonnetfile
+          volumeMounts:
+            - mountPath: /etc/kratos
+              name: other-configs
+      serviceAccountName: ztka-kratos
+      volumes:
+        - configMap:
+            name: ztka-kratos-config
+          name: ztka-kratos-config-volume
+        - emptyDir: {}
+          name: other-configs
+        - configMap:
+            defaultMode: 420
+            name: kratos-config-hooks
+          name: kratos-config-hooks

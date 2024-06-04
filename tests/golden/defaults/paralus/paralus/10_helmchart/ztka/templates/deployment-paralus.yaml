@@ -1,0 +1,123 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/instance: ztka
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: paralus
+    app.kubernetes.io/version: v0.2.7
+    helm.sh/chart: ztka-0.2.8
+  name: paralus
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: ztka
+      app.kubernetes.io/name: paralus
+  template:
+    metadata:
+      annotations:
+        checksum/config: 541be8131aa7151836e57711a33b03f66eb2c6af6e0adc16014e4638266ee6a9
+      labels:
+        app.kubernetes.io/instance: ztka
+        app.kubernetes.io/name: paralus
+    spec:
+      containers:
+        - command:
+            - sh
+            - -c
+            - tail -F /audit-logs/audit.log 2>/tmp/tail-err
+          image: docker.io/library/busybox:latest
+          imagePullPolicy: IfNotPresent
+          name: paralus-tail
+          securityContext: {}
+          volumeMounts:
+            - mountPath: /audit-logs
+              name: audit-logs
+        - command:
+            - ./paralus
+          envFrom:
+            - configMapRef:
+                name: paralus-config
+            - secretRef:
+                name: paralus-db
+          image: paralusio/paralus:v0.2.7
+          imagePullPolicy: IfNotPresent
+          name: paralus
+          ports:
+            - containerPort: 11000
+              name: http
+            - containerPort: 10000
+              name: rpc
+            - containerPort: 10001
+              name: relay-peering
+          resources: {}
+          securityContext: {}
+          volumeMounts:
+            - mountPath: /audit-logs
+              name: audit-logs
+      initContainers:
+        - args:
+            - migrate
+            - sql
+            - -e
+            - --yes
+          command:
+            - kratos
+          env:
+            - name: DSN
+              valueFrom:
+                secretKeyRef:
+                  key: DSN
+                  name: paralus-db
+          image: paralusio/paralus-init:v0.2.7
+          imagePullPolicy: IfNotPresent
+          name: kratos-automigrate
+        - args:
+            - -path=/data/migrations/admindb
+            - -database
+            - $(DSN)
+            - up
+          command:
+            - migrate
+          env:
+            - name: DSN
+              valueFrom:
+                secretKeyRef:
+                  key: DSN
+                  name: paralus-db
+          image: paralusio/paralus-init:v0.2.7
+          imagePullPolicy: IfNotPresent
+          name: migrate-admindb
+        - args:
+            - -partner
+            - Paralus
+            - -partner-desc
+            - Default Partner
+            - -partner-host
+            - paralus.local
+            - -org
+            - ParalusOrg
+            - -org-desc
+            - Default Organization
+            - -admin-email
+            - admin@paralus.local
+            - -admin-first-name
+            - Admin
+            - -admin-last-name
+            - User
+          command:
+            - paralus-init
+          envFrom:
+            - configMapRef:
+                name: paralus-config
+            - secretRef:
+                name: paralus-db
+          image: paralusio/paralus-init:v0.2.7
+          imagePullPolicy: IfNotPresent
+          name: initialize
+      securityContext: {}
+      serviceAccountName: ztka-ztka
+      volumes:
+        - emptyDir: {}
+          name: audit-logs

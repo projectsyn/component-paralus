@@ -1,0 +1,30 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    route.openshift.io/termination: passthrough
+  labels:
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/version: v0.2.7
+    helm.sh/chart: ztka-0.2.8
+  name: ztka
+spec:
+  rules:
+    - host: '*.core-connector.paralus.example.com'
+      http:
+        paths:
+          - backend:
+              service:
+                name: relay-server
+                port:
+                  number: 443
+            pathType: ImplementationSpecific
+    - host: '*.user.paralus.example.com'
+      http:
+        paths:
+          - backend:
+              service:
+                name: relay-server
+                port:
+                  number: 443
+            pathType: ImplementationSpecific

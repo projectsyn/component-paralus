@@ -1,0 +1,62 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  labels:
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/version: v0.2.7
+    helm.sh/chart: ztka-0.2.8
+  name: console
+spec:
+  rules:
+    - host: console.paralus.example.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: paralus
+                port:
+                  number: 11000
+            path: /auth
+            pathType: Prefix
+          - backend:
+              service:
+                name: paralus
+                port:
+                  number: 11000
+            path: /event
+            pathType: Prefix
+          - backend:
+              service:
+                name: paralus
+                port:
+                  number: 11000
+            path: /infra
+            pathType: Prefix
+          - backend:
+              service:
+                name: paralus
+                port:
+                  number: 11000
+            path: /v2/sentry
+            pathType: Prefix
+          - backend:
+              service:
+                name: prompt
+                port:
+                  number: 7009
+            path: /v2/debug/prompt
+            pathType: Prefix
+          - backend:
+              service:
+                name: dashboard
+                port:
+                  number: 80
+            path: /
+            pathType: Prefix
+          - backend:
+              service:
+                name: ztka-kratos-public
+                port:
+                  number: 80
+            path: /self-service
+            pathType: Prefix

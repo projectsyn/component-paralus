@@ -2,3 +2,52 @@ parameters:
   paralus:
     =_metadata: {}
     namespace: syn-paralus
+
+    charts:
+      ztka:
+        source: https://paralus.github.io/helm-charts
+        version: 0.2.8
+
+    images:
+      busybox:
+        registry: docker.io
+        repository: library/busybox
+        tag: latest
+
+    dashboard_container_port: 8000
+
+    openshift_compatibility: false
+
+    db_args:
+      # Default setting in Helm chart
+      sslmode: disable
+
+    helm_values: # Refer to docs: https://github.com/paralus/helm-charts/blob/main/charts/ztka/values.yaml
+      replicaCount: 2
+
+      analytics:
+        enable: false
+
+      deploy:
+        postgresql:
+          enable: false
+          address: "foo"
+          username: "foo"
+          password: "foo"
+          database: "foo"
+
+      autoscaling:
+        enabled: false
+        minReplicas: 1
+        maxReplicas: 10
+        targetCPUUtilizationPercentage: 80
+
+      fluent-bit:
+        # Configure PG sslmode via env var for fluent bit. This should work as
+        # expected, cf.
+        # https://docs.fluentbit.io/manual/pipeline/outputs/postgresql#libpq
+        # The libpq env var for the sslmode connection argument is PGSSLMODE,
+        # cf. https://www.postgresql.org/docs/current/libpq-envars.html
+        env:
+          - name: PGSSLMODE
+            value: ${paralus:db_args:sslmode}
