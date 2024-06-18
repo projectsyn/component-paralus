@@ -15,6 +15,11 @@ metadata:
     helm.sh/hook: post-upgrade,post-rollback
     helm.sh/hook-delete-policy: hook-succeeded
     helm.sh/hook-weight: '-2'
+  labels:
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: paralus
+    app.kubernetes.io/version: v0.2.8
+    helm.sh/chart: ztka-0.2.9
   name: kratos-restart
   namespace: syn-paralus
 rules:
@@ -37,6 +42,12 @@ metadata:
     helm.sh/hook: post-upgrade,post-rollback
     helm.sh/hook-delete-policy: hook-succeeded
     helm.sh/hook-weight: '-1'
+  labels:
+    app.kubernetes.io/component: job
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: paralus
+    app.kubernetes.io/version: v0.2.8
+    helm.sh/chart: ztka-0.2.9
   name: kratos-restart
   namespace: syn-paralus
 roleRef:
@@ -55,6 +66,12 @@ metadata:
     helm.sh/hook: post-upgrade,post-rollback
     helm.sh/hook-delete-policy: hook-succeeded
     helm.sh/hook-weight: '0'
+  labels:
+    app.kubernetes.io/component: job
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: paralus
+    app.kubernetes.io/version: v0.2.8
+    helm.sh/chart: ztka-0.2.9
   name: kratos-restart
 spec:
   activeDeadlineSeconds: 600
