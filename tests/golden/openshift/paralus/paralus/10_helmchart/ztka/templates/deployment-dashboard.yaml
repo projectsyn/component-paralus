@@ -2,11 +2,13 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
+    app.kubernetes.io/component: workload
     app.kubernetes.io/instance: ztka
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: dashboard
-    app.kubernetes.io/version: v0.2.7
-    helm.sh/chart: ztka-0.2.8
+    app.kubernetes.io/part-of: paralus
+    app.kubernetes.io/version: v0.2.8
+    helm.sh/chart: ztka-0.2.9
   name: dashboard
 spec:
   replicas: 2
@@ -17,11 +19,16 @@ spec:
   template:
     metadata:
       labels:
+        app.kubernetes.io/component: workload
         app.kubernetes.io/instance: ztka
+        app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: dashboard
+        app.kubernetes.io/part-of: paralus
+        app.kubernetes.io/version: v0.2.8
+        helm.sh/chart: ztka-0.2.9
     spec:
       containers:
-        - image: paralusio/dashboard:v0.2.2
+        - image: paralusio/dashboard:v0.2.3
           imagePullPolicy: IfNotPresent
           name: dashboard
           ports:
