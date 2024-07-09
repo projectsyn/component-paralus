@@ -178,7 +178,7 @@ spec:
                   name: paralus-db
             - name: KRATOS_PROVIDER_CFG
               value: /etc/kratos/providers.yaml
-          image: paralusio/kratos-synchronizer:v0.2.7
+          image: paralusio/kratos-synchronizer:v0.2.8
           name: synchronizer
           volumeMounts:
             - mountPath: /etc/kratos
