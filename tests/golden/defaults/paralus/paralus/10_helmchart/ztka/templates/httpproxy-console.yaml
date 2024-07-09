@@ -6,21 +6,29 @@ spec:
   routes:
     - conditions:
         - prefix: /auth
+      loadBalancerPolicy:
+        strategy: Cookie
       services:
         - name: paralus
           port: 11000
     - conditions:
         - prefix: /event
+      loadBalancerPolicy:
+        strategy: Cookie
       services:
         - name: paralus
           port: 11000
     - conditions:
         - prefix: /infra
+      loadBalancerPolicy:
+        strategy: Cookie
       services:
         - name: paralus
           port: 11000
     - conditions:
         - prefix: /v2/sentry
+      loadBalancerPolicy:
+        strategy: Cookie
       services:
         - name: paralus
           port: 11000

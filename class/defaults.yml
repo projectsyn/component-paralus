@@ -18,6 +18,14 @@ parameters:
 
     openshift_compatibility: false
 
+    httpProxyParalus:
+      # A valid Contour `loadBalancerPolicy`, cf.
+      # https://projectcontour.io/docs/1.24/config/request-routing/#load-balancing-strategy.
+      # The contents of this field are applied to each entry of the `console`
+      # HTTPProxy `spec.routes` which has the Paralus service as the backend.
+      loadBalancerPolicy:
+        strategy: Cookie
+
     db_args:
       # Default setting in Helm chart
       sslmode: disable
