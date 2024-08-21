@@ -1,0 +1,61 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  annotations: {}
+  labels:
+    name: paralus-pgdb-log-cleanup-cronjob
+  name: paralus-pgdb-log-cleanup-cronjob
+  namespace: syn-paralus
+spec:
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      completions: 1
+      parallelism: 1
+      template:
+        metadata:
+          labels:
+            name: paralus-pgdb-log-cleanup-cronjob
+        spec:
+          containers:
+            - args:
+                - psql
+                - -h
+                - $(DB_ADDR)
+                - -U
+                - $(DB_USER)
+                - -d
+                - $(DB_NAME)
+                - -c
+                - DELETE FROM audit_logs WHERE time < NOW() - INTERVAL '30 days';
+              env:
+                - name: PGPASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      key: DB_PASSWORD
+                      name: paralus-db
+                - name: DB_ADDR
+                  valueFrom:
+                    secretKeyRef:
+                      key: DB_ADDR
+                      name: paralus-db
+                - name: DB_USER
+                  valueFrom:
+                    secretKeyRef:
+                      key: DB_USER
+                      name: paralus-db
+                - name: DB_NAME
+                  valueFrom:
+                    secretKeyRef:
+                      key: DB_NAME
+                      name: paralus-db
+              image: docker.io/library/postgres:latest
+              name: postgres-cleanup
+          imagePullSecrets: []
+          initContainers: []
+          restartPolicy: OnFailure
+          terminationGracePeriodSeconds: 30
+          volumes: []
+  schedule: 0 2 * * *
+  successfulJobsHistoryLimit: 3
