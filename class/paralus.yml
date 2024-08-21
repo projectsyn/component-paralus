@@ -39,3 +39,13 @@ parameters:
         - type: jsonnet
           path: paralus/10_helmchart/ztka/charts/kratos/templates
           filter: postprocess/patch_kratos.jsonnet
+
+  paralus:
+    namespace: "syn-paralus"
+    dbCronJob:
+      schedule: "0 2 * * *"  # Set the CronJob schedule
+      jobHistoryLimit:
+        failed: 1
+        successful: 3
+      retention: "30"  # Retention period for the audit logs in days
+      image: "postgres:latest"  # Image to use for the CronJob
