@@ -40,49 +40,17 @@ local cronJob = kube.CronJob('paralus-pgdb-log-cleanup-cronjob') {
                 image: '%(registry)s/%(repository)s:%(tag)s' % params.images.dbCronJob,
                 args: [
                   'psql',
-                  '-h',
-                  '$(DB_ADDR)',
-                  '-U',
-                  '$(DB_USER)',
-                  '-d',
-                  '$(DB_NAME)',
+                  '$(DSN)',
                   '-c',
                   "DELETE FROM audit_logs WHERE time < NOW() - INTERVAL '%d days';" % params.dbCronJob.retention,
                 ],
                 env: [
                   {
-                    name: 'PGPASSWORD',
+                    name: 'DSN',
                     valueFrom: {
                       secretKeyRef: {
                         name: 'paralus-db',
-                        key: 'DB_PASSWORD',
-                      },
-                    },
-                  },
-                  {
-                    name: 'DB_ADDR',
-                    valueFrom: {
-                      secretKeyRef: {
-                        name: 'paralus-db',
-                        key: 'DB_ADDR',
-                      },
-                    },
-                  },
-                  {
-                    name: 'DB_USER',
-                    valueFrom: {
-                      secretKeyRef: {
-                        name: 'paralus-db',
-                        key: 'DB_USER',
-                      },
-                    },
-                  },
-                  {
-                    name: 'DB_NAME',
-                    valueFrom: {
-                      secretKeyRef: {
-                        name: 'paralus-db',
-                        key: 'DB_NAME',
+                        key: 'DSN',
                       },
                     },
                   },

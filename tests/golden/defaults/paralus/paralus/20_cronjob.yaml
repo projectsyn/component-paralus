@@ -21,34 +21,14 @@ spec:
           containers:
             - args:
                 - psql
-                - -h
-                - $(DB_ADDR)
-                - -U
-                - $(DB_USER)
-                - -d
-                - $(DB_NAME)
+                - $(DSN)
                 - -c
                 - DELETE FROM audit_logs WHERE time < NOW() - INTERVAL '30 days';
               env:
-                - name: PGPASSWORD
+                - name: DSN
                   valueFrom:
                     secretKeyRef:
-                      key: DB_PASSWORD
-                      name: paralus-db
-                - name: DB_ADDR
-                  valueFrom:
-                    secretKeyRef:
-                      key: DB_ADDR
-                      name: paralus-db
-                - name: DB_USER
-                  valueFrom:
-                    secretKeyRef:
-                      key: DB_USER
-                      name: paralus-db
-                - name: DB_NAME
-                  valueFrom:
-                    secretKeyRef:
-                      key: DB_NAME
+                      key: DSN
                       name: paralus-db
               image: docker.io/library/postgres:latest
               name: postgres-cleanup
