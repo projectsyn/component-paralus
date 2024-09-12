@@ -1,6 +1,6 @@
 {
   "template": "https://github.com/projectsyn/commodore-component-template.git",
-  "commit": "4291cc289dc10c009574c21ceba8eac0b68b0e23",
+  "commit": "012d54d7f579e3624e45f361d0f14a2a43016682",
   "checkout": "main",
   "context": {
     "cookiecutter": {
@@ -13,11 +13,17 @@
       "add_golden": "y",
       "add_matrix": "y",
       "add_go_unit": "n",
+      "automerge_patch": "y",
+      "automerge_patch_v0": "n",
+      "automerge_patch_regexp_blocklist": "",
+      "automerge_patch_v0_regexp_allowlist": "",
+      "automerge_minor_regexp_allowlist": "",
+      "auto_release": "y",
       "copyright_holder": "VSHN AG <info@vshn.ch>",
       "copyright_year": "2024",
-      "github_owner": "soontobemil",
+      "github_owner": "projectsyn",
       "github_name": "component-paralus",
-      "github_url": "https://github.com/soontobemil/component-paralus",
+      "github_url": "https://github.com/projectsyn/component-paralus",
       "_template": "https://github.com/projectsyn/commodore-component-template.git"
     }
   },

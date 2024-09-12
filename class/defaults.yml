@@ -13,6 +13,10 @@ parameters:
         registry: docker.io
         repository: library/busybox
         tag: latest
+      dbCronJob:
+        registry: docker.io
+        repository: library/postgres
+        tag: latest
 
     dashboard_container_port: 8000
 
@@ -29,6 +33,13 @@ parameters:
     db_args:
       # Default setting in Helm chart
       sslmode: disable
+
+    dbCronJob:
+      schedule: "0 2 * * *"  # Set the CronJob schedule
+      jobHistoryLimit:
+        failed: 1
+        successful: 3
+      retention: 30  # Retention period for the audit logs in days
 
     helm_values: # Refer to docs: https://github.com/paralus/helm-charts/blob/main/charts/ztka/values.yaml
       replicaCount: 2

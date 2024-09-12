@@ -64,7 +64,7 @@ NOTE: OpenShift's ingress router must be configured to allow wildcard routes for
 
 == `httpProxyParalus`
 
-This parameter contains customizations to apply  to the Contour `HTTPProxy` object for the Paralus control plane.
+This parameter contains customizations to apply to the Contour `HTTPProxy` object for the Paralus control plane.
 
 === `httpProxyParalus.loadBalancerPolicy`
 
@@ -83,6 +83,14 @@ See the https://projectcontour.io/docs/1.24/config/request-routing/#load-balanci
 The component will apply the contents of this field as field `loadBalancerPolicy` for each entry in `spec.routes` of the `console` Contour `HTTPProxy` which points to the Paralus service.
 
 By default, the component configures sticky sessions for the Paralus service.
+
+== `dbCronJob`
+
+This parameter contains customizations to apply to the cronjob cleaning up audit logs.
+
+[horizontal]
+type:: dictionary
+default:: See https://github.com/projectsyn/component-paralus/blob/master/class/defaults.yml[`class/defaults.yml`]
 
 == `helm_values`
 
