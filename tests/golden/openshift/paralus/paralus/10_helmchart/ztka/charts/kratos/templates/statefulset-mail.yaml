@@ -20,7 +20,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/kratos-config: 455090954760645a588506b1e1cea0000e61d3afafb1204b5548d9082caf5872
+        checksum/kratos-config: 09cc7410aa0f329ac38018c445be2eaa4c657820c4ff437284998ac1f9b817ae
         checksum/kratos-templates: 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b
       labels:
         app.kubernetes.io/instance: ztka
