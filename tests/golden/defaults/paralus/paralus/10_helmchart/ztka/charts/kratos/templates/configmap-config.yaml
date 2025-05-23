@@ -78,6 +78,8 @@ data:
         settings:
           privileged_session_max_age: 15m
       methods:
+        link:
+          enabled: true
         oidc:
           enabled: true
         password:
