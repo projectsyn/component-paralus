@@ -1,6 +1,7 @@
 parameters:
   paralus:
-    =_metadata: {}
+    =_metadata:
+      multi_instance: true
     namespace: syn-paralus
 
     charts:
