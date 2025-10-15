@@ -66,5 +66,5 @@ local cronJob = kube.CronJob('paralus-pgdb-log-cleanup-cronjob') {
 
 {
   '10_namespace': namespace,
-  '20_cronjob':  cronJob,
+  '20_cronjob': cronJob,
 }
