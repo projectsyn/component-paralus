@@ -4,8 +4,7 @@ local params = inv.parameters.paralus;
 local argocd = import 'lib/argocd.libjsonnet';
 local instance = inv.parameters._instance;
 
-local appName = if instance == 'paralus' then 'paralus' else instance;
-local app = argocd.App(appName, params.namespace);
+local app = argocd.App(instance, params.namespace);
 
 {
   [instance]: app,
