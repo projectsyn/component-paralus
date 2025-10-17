@@ -3,6 +3,8 @@ parameters:
     =_metadata:
       multi_instance: true
     namespace: syn-paralus
+    helm_params:
+      name: ztka
 
     charts:
       ztka:

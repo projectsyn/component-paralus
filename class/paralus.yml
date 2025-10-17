@@ -21,7 +21,7 @@ parameters:
         output_path: ${_instance}/10_helmchart
         helm_values: ${paralus:helm_values}
         helm_params:
-          name: ztka
+          name: ${paralus:helm_params:name}
           namespace: ${paralus:namespace}
           dependency_update: true
   commodore:
