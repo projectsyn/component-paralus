@@ -1,15 +1,15 @@
 local com = import 'lib/commodore.libjsonnet';
 local inv = com.inventory();
 local instance = inv.parameters._instance;
+local manifests_dir = std.extVar('output_path');
 
-local removeCrdsFilter(objs) =
+local stripCRDs(obj) =
   if instance == 'paralus-test' then
-    std.filter(
-      function(o)
-        o.kind != 'CustomResourceDefinition',
-      objs
-    )
+    if obj.kind == 'CustomResourceDefinition' then
+      null
+    else
+      obj
   else
-    objs;
+    obj;
 
-removeCrdsFilter
+com.fixupDir(manifests_dir, stripCRDs)
