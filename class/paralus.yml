@@ -39,3 +39,6 @@ parameters:
         - type: jsonnet
           path: ${_instance}/10_helmchart/ztka/charts/kratos/templates
           filter: postprocess/patch_kratos.jsonnet
+        - type: jsonnet
+          path: ${_instance}/10_helmchart/ztka/crds
+          filter: postprocess/remove_crds_on_additional_instance.jsonnet
