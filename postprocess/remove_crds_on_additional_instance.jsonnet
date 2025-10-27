@@ -1,6 +1,6 @@
-local com           = import 'lib/commodore.libjsonnet';
-local inv           = com.inventory();
-local instance      = inv.parameters._instance;
+local com = import 'lib/commodore.libjsonnet';
+local inv = com.inventory();
+local instance = inv.parameters._instance;
 local manifests_dir = std.extVar('output_path');
 
 local stripCRDs(obj) =
