@@ -1,5 +1,6 @@
 local com = import 'lib/commodore.libjsonnet';
 local inv = com.inventory();
+local params = inv.parameters.paralus;
 local manifests_dir = std.extVar('output_path');
 
 local install_crds = params.install_crds;
