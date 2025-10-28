@@ -1,15 +1,16 @@
 local com = import 'lib/commodore.libjsonnet';
 local inv = com.inventory();
-local instance = inv.parameters._instance;
 local manifests_dir = std.extVar('output_path');
 
+local install_crds = params.install_crds;
+
 local stripCRDs(obj) =
-  if instance == 'paralus-test' then
+  if install_crds then
+    obj
+  else
     if obj.kind == 'CustomResourceDefinition' then
       null
     else
-      obj
-  else
-    obj;
+      obj;
 
 com.fixupDir(manifests_dir, stripCRDs)

@@ -7,6 +7,8 @@ parameters:
     helm_params:
       name: ztka
 
+    install_crds: true
+
     charts:
       ztka:
         source: https://paralus.github.io/helm-charts
