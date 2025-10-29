@@ -10,7 +10,7 @@ local stripCRDs(obj) =
     obj
   else
     if obj.kind == 'CustomResourceDefinition' then
-      null
+      {}
     else
       obj;
 
