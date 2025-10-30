@@ -23,7 +23,7 @@ local namespace = kube.Namespace(params.namespace) {
 
 local cronJob = kube.CronJob('paralus-pgdb-log-cleanup-cronjob') {
   metadata+: {
-    namespace: inv.parameters.paralus.namespace,
+    namespace: params.namespace,
   },
   spec+: {
     schedule: params.dbCronJob.schedule,

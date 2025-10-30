@@ -14,28 +14,31 @@ parameters:
       - input_paths:
           - ${_base_directory}/component/main.jsonnet
         input_type: jsonnet
-        output_path: paralus/
+        output_path: ${_instance}
       - input_paths:
           - ${_base_directory}/helmcharts/paralus/${paralus:charts:ztka:version}
         input_type: helm
-        output_path: paralus/10_helmchart
+        output_path: ${_instance}/10_helmchart
         helm_values: ${paralus:helm_values}
         helm_params:
-          name: ztka
+          name: ${paralus:helm_params:name}
           namespace: ${paralus:namespace}
           dependency_update: true
   commodore:
     postprocess:
       filters:
         - type: jsonnet
-          path: paralus/10_helmchart/ztka/templates
+          path: ${_instance}/10_helmchart/ztka/templates
           filter: postprocess/patch_paralus.jsonnet
         - type: jsonnet
-          path: paralus/10_helmchart/ztka/templates
+          path: ${_instance}/10_helmchart/ztka/templates
           filter: postprocess/patch_ingress.jsonnet
         - type: jsonnet
-          path: paralus/10_helmchart/ztka/templates
+          path: ${_instance}/10_helmchart/ztka/templates
           filter: postprocess/patch_httpproxy.jsonnet
         - type: jsonnet
-          path: paralus/10_helmchart/ztka/charts/kratos/templates
+          path: ${_instance}/10_helmchart/ztka/charts/kratos/templates
           filter: postprocess/patch_kratos.jsonnet
+        - type: jsonnet
+          path: ${_instance}/10_helmchart/ztka/crds
+          filter: postprocess/remove_crds_on_additional_instance.jsonnet

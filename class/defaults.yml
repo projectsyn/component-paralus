@@ -2,7 +2,12 @@ parameters:
   paralus:
     =_metadata:
       multi_instance: true
+      multi_version: true
     namespace: syn-paralus
+    helm_params:
+      name: ztka
+
+    install_crds: true
 
     charts:
       ztka:
