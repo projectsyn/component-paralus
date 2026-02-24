@@ -7,7 +7,7 @@ metadata:
     app.kubernetes.io/name: dashboard
     app.kubernetes.io/part-of: paralus
     app.kubernetes.io/version: v0.2.8
-    helm.sh/chart: ztka-0.2.9
+    helm.sh/chart: ztka-0.2.10
   name: dashboard
 spec:
   ports:
