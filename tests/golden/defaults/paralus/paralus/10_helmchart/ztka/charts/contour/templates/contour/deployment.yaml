@@ -6,7 +6,8 @@ metadata:
     app.kubernetes.io/instance: ztka
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: contour
-    helm.sh/chart: contour-7.8.0
+    app.kubernetes.io/version: 1.33.0
+    helm.sh/chart: contour-0.2.0
   name: ztka-contour-contour
   namespace: syn-paralus
 spec:
@@ -19,13 +20,14 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: 79b0450c19174855fcf43002872818874c25a831e05edd3eb139800ad47af860
+        checksum/config: a44ce22d1692830adba1c7871b980884c2453993bdbb990c3dc26ea0d954f329
       labels:
         app.kubernetes.io/component: contour
         app.kubernetes.io/instance: ztka
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: contour
-        helm.sh/chart: contour-7.8.0
+        app.kubernetes.io/version: 1.33.0
+        helm.sh/chart: contour-0.2.0
     spec:
       affinity:
         nodeAffinity: null
@@ -38,10 +40,9 @@ spec:
                     app.kubernetes.io/component: contour
                     app.kubernetes.io/instance: ztka
                     app.kubernetes.io/name: contour
-                namespaces:
-                  - syn-paralus
                 topologyKey: kubernetes.io/hostname
               weight: 1
+      automountServiceAccountToken: true
       containers:
         - args:
             - serve
@@ -55,6 +56,10 @@ spec:
             - --contour-cert-file=/certs/tls.crt
             - --contour-key-file=/certs/tls.key
             - --config-path=/config/contour.yaml
+            - --envoy-service-namespace=syn-paralus
+            - --envoy-service-name=ztka-contour-envoy
+            - --leader-election-resource-name=syn-paralus-ztka-contour-contour
+            - --log-format=text
             - --kubernetes-debug=0
           command:
             - contour
@@ -71,16 +76,15 @@ spec:
                   fieldPath: metadata.name
             - name: BITNAMI_DEBUG
               value: 'false'
-          image: docker.io/bitnami/contour:1.20.1-debian-10-r53
+          image: ghcr.io/projectcontour/contour:v1.33.0
           imagePullPolicy: IfNotPresent
           livenessProbe:
             failureThreshold: 6
-            httpGet:
-              path: /healthz
-              port: 8000
             initialDelaySeconds: 120
             periodSeconds: 20
             successThreshold: 1
+            tcpSocket:
+              port: 8000
             timeoutSeconds: 5
           name: contour
           ports:
@@ -100,11 +104,27 @@ spec:
             successThreshold: 1
             timeoutSeconds: 5
           resources:
-            limits: {}
-            requests: {}
+            limits:
+              cpu: 150m
+              ephemeral-storage: 2Gi
+              memory: 192Mi
+            requests:
+              cpu: 100m
+              ephemeral-storage: 50Mi
+              memory: 128Mi
           securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsGroup: 1001
             runAsNonRoot: true
             runAsUser: 1001
+            seLinuxOptions: {}
+            seccompProfile:
+              type: RuntimeDefault
           volumeMounts:
             - mountPath: /certs
               name: contourcert
@@ -115,6 +135,9 @@ spec:
       dnsPolicy: ClusterFirst
       securityContext:
         fsGroup: 1001
+        fsGroupChangePolicy: Always
+        supplementalGroups: []
+        sysctls: []
       serviceAccountName: ztka-contour-contour
       volumes:
         - name: contourcert

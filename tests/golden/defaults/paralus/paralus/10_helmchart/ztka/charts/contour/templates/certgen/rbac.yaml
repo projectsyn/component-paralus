@@ -9,7 +9,8 @@ metadata:
     app.kubernetes.io/instance: ztka
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: contour
-    helm.sh/chart: contour-7.8.0
+    app.kubernetes.io/version: 1.33.0
+    helm.sh/chart: contour-0.2.0
   name: ztka-contour-contour-certgen
   namespace: syn-paralus
 rules:
@@ -32,7 +33,8 @@ metadata:
     app.kubernetes.io/instance: ztka
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: contour
-    helm.sh/chart: contour-7.8.0
+    app.kubernetes.io/version: 1.33.0
+    helm.sh/chart: contour-0.2.0
   name: ztka-contour-contour-certgen
   namespace: syn-paralus
 roleRef:
