@@ -8,7 +8,8 @@ metadata:
     app.kubernetes.io/instance: ztka
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: contour
-    helm.sh/chart: contour-7.8.0
+    app.kubernetes.io/version: 1.33.0
+    helm.sh/chart: contour-0.2.0
   name: ztka-contour-envoy
   namespace: syn-paralus
 spec:
@@ -26,4 +27,5 @@ spec:
     app.kubernetes.io/component: envoy
     app.kubernetes.io/instance: ztka
     app.kubernetes.io/name: contour
+  sessionAffinity: None
   type: LoadBalancer

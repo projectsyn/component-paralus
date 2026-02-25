@@ -7,8 +7,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: paralus
     app.kubernetes.io/part-of: paralus
-    app.kubernetes.io/version: v0.2.8
-    helm.sh/chart: ztka-0.2.10
+    app.kubernetes.io/version: v0.3.0
+    helm.sh/chart: ztka-0.3.1
   name: paralus
 spec:
   replicas: 2
@@ -19,15 +19,15 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: 3d1399af0759db631a760891542c81f4ad5852d3a99fccd5cf1261e0946150a5
+        checksum/config: f48d52415e11947d25d54d76d747e67196f37a25e62e0535fe40e825522f5499
       labels:
         app.kubernetes.io/component: workload
         app.kubernetes.io/instance: ztka
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: paralus
         app.kubernetes.io/part-of: paralus
-        app.kubernetes.io/version: v0.2.8
-        helm.sh/chart: ztka-0.2.10
+        app.kubernetes.io/version: v0.3.0
+        helm.sh/chart: ztka-0.3.1
     spec:
       containers:
         - command:
@@ -48,7 +48,7 @@ spec:
                 name: paralus-config
             - secretRef:
                 name: paralus-db
-          image: paralusio/paralus:v0.2.8
+          image: paralusio/paralus:v0.3.0
           imagePullPolicy: IfNotPresent
           name: paralus
           ports:
@@ -77,7 +77,7 @@ spec:
                 secretKeyRef:
                   key: DSN
                   name: paralus-db
-          image: paralusio/paralus-init:v0.2.8
+          image: paralusio/paralus-init:v0.3.0
           imagePullPolicy: IfNotPresent
           name: kratos-automigrate
         - args:
@@ -93,7 +93,7 @@ spec:
                 secretKeyRef:
                   key: DSN
                   name: paralus-db
-          image: paralusio/paralus-init:v0.2.8
+          image: paralusio/paralus-init:v0.3.0
           imagePullPolicy: IfNotPresent
           name: migrate-admindb
         - args:
@@ -120,7 +120,7 @@ spec:
                 name: paralus-config
             - secretRef:
                 name: paralus-db
-          image: paralusio/paralus-init:v0.2.8
+          image: paralusio/paralus-init:v0.3.0
           imagePullPolicy: IfNotPresent
           name: initialize
       securityContext: {}
