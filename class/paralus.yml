@@ -42,3 +42,6 @@ parameters:
         - type: jsonnet
           path: ${_instance}/10_helmchart/ztka/crds
           filter: postprocess/remove_crds_on_additional_instance.jsonnet
+        - type: jsonnet
+          path: ${_instance}/10_helmchart/ztka/charts/contour/templates/crds
+          filter: postprocess/remove-null-objs.jsonnet
